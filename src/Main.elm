@@ -65,7 +65,7 @@ init _ =
       , wordStartTime = Nothing
       , totalWPM = 0
       , currentWPM = 0
-      , dpwpm = 0.1
+      , dpwpm = 1
       , enemyHp = 100
       , enemyPosition = 5
       }
@@ -191,13 +191,20 @@ mysteryWordView model =
           , button [class "button is-primary", onClick NextWord] [text "➡️ Next Word"]
           , br [] []
           , br [] []
-          , progressBar model
           , h1 [ class "title" ] [ text ("Total WPM: " ++ (String.fromFloat model.totalWPM )) ]
           , h1 [ class "title" ] [ text ("Current WPM: " ++ (String.fromFloat model.currentWPM)) ]          
           , h1 [ class "title" ] [ text ("DPWPM: " ++ (String.fromFloat model.dpwpm)) ]          
           , h1 [ class "title" ] [ text ("Enemy HP: " ++ (String.fromInt model.enemyHp)) ]          
-          , h1 [ class "title" ] [ text ("Enemy Position: " ++ (String.fromInt model.enemyPosition)) ]          
+          , h1 [ class "title" ] [ text ("Enemy Position: " ++ (String.fromInt model.enemyPosition)) ]
+          , enemy model          
           ]
+    ]
+
+enemy : Model -> Html Msg
+enemy model =
+    span []
+    [ progressBar (toFloat model.enemyHp)
+    , img [class "image", src "enemy.jpg"] []    
     ]
 
 getCurrentLetter : Model -> Char
@@ -231,24 +238,9 @@ wordList : List String -> Html Msg
 wordList listOfWords =
     ul [] (List.map (\word -> li [ class "title" ] [ text word ]) listOfWords)
 
-progressBar : Model -> Html Msg
-progressBar model = 
-  let maxRounds = List.length model.allSentences
-      currentRound = model.whichWord
-      progressPercent = 100 * (toFloat currentRound) / (toFloat maxRounds)
-  in
-    if progressPercent < 100 then
-      Html.progress [class "progress is-success", Html.Attributes.max "100", Html.Attributes.value (String.fromFloat progressPercent)] [text ""]
-    else
-      div [class "modal is-active"]
-          [ div [class "modal-background"] []
-          , div [class "modal-content"] 
-                [section [class "hero is-primary"]
-                         [ div [class "hero-body"]
-                               [p [class "title"] [text "All Done!"]]
-                         ]
-                ]
-          ]
+progressBar : Float -> Html Msg
+progressBar progressPercent = 
+    Html.progress [class "progress is-success", Html.Attributes.max "100", Html.Attributes.value (String.fromFloat progressPercent)] [text ""]
 
 -- DETECT ENTER
 

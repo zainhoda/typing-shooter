@@ -5299,7 +5299,7 @@ var $author$project$Main$init = function (_v0) {
 			allSentences: _List_fromArray(
 				['The quick brown fox jumps over the lazy dog.']),
 			currentWPM: 0,
-			dpwpm: 0.1,
+			dpwpm: 1,
 			draft: '',
 			enemyHp: 100,
 			enemyPosition: 5,
@@ -5979,11 +5979,54 @@ var $elm$html$Html$Attributes$stringProperty = F2(
 	});
 var $elm$html$Html$Attributes$class = $elm$html$Html$Attributes$stringProperty('className');
 var $elm$html$Html$div = _VirtualDom_node('div');
+var $elm$html$Html$img = _VirtualDom_node('img');
 var $elm$core$String$fromFloat = _String_fromNumber;
-var $elm$html$Html$h1 = _VirtualDom_node('h1');
-var $elm$core$Basics$neq = _Utils_notEqual;
+var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
+var $elm$html$Html$progress = _VirtualDom_node('progress');
 var $elm$virtual_dom$VirtualDom$text = _VirtualDom_text;
 var $elm$html$Html$text = $elm$virtual_dom$VirtualDom$text;
+var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
+var $author$project$Main$progressBar = function (progressPercent) {
+	return A2(
+		$elm$html$Html$progress,
+		_List_fromArray(
+			[
+				$elm$html$Html$Attributes$class('progress is-success'),
+				$elm$html$Html$Attributes$max('100'),
+				$elm$html$Html$Attributes$value(
+				$elm$core$String$fromFloat(progressPercent))
+			]),
+		_List_fromArray(
+			[
+				$elm$html$Html$text('')
+			]));
+};
+var $elm$html$Html$span = _VirtualDom_node('span');
+var $elm$html$Html$Attributes$src = function (url) {
+	return A2(
+		$elm$html$Html$Attributes$stringProperty,
+		'src',
+		_VirtualDom_noJavaScriptOrHtmlUri(url));
+};
+var $author$project$Main$enemy = function (model) {
+	return A2(
+		$elm$html$Html$span,
+		_List_Nil,
+		_List_fromArray(
+			[
+				$author$project$Main$progressBar(model.enemyHp),
+				A2(
+				$elm$html$Html$img,
+				_List_fromArray(
+					[
+						$elm$html$Html$Attributes$class('image'),
+						$elm$html$Html$Attributes$src('enemy.jpg')
+					]),
+				_List_Nil)
+			]));
+};
+var $elm$html$Html$h1 = _VirtualDom_node('h1');
+var $elm$core$Basics$neq = _Utils_notEqual;
 var $author$project$Main$mysteryLetter = F3(
 	function (guess, word, numberFound) {
 		return A2(
@@ -6056,81 +6099,6 @@ var $elm$html$Html$Events$onClick = function (msg) {
 		'click',
 		$elm$json$Json$Decode$succeed(msg));
 };
-var $elm$html$Html$Attributes$max = $elm$html$Html$Attributes$stringProperty('max');
-var $elm$html$Html$p = _VirtualDom_node('p');
-var $elm$html$Html$progress = _VirtualDom_node('progress');
-var $elm$html$Html$section = _VirtualDom_node('section');
-var $elm$html$Html$Attributes$value = $elm$html$Html$Attributes$stringProperty('value');
-var $author$project$Main$progressBar = function (model) {
-	var maxRounds = $elm$core$List$length(model.allSentences);
-	var currentRound = model.whichWord;
-	var progressPercent = (100 * currentRound) / maxRounds;
-	return (progressPercent < 100) ? A2(
-		$elm$html$Html$progress,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('progress is-success'),
-				$elm$html$Html$Attributes$max('100'),
-				$elm$html$Html$Attributes$value(
-				$elm$core$String$fromFloat(progressPercent))
-			]),
-		_List_fromArray(
-			[
-				$elm$html$Html$text('')
-			])) : A2(
-		$elm$html$Html$div,
-		_List_fromArray(
-			[
-				$elm$html$Html$Attributes$class('modal is-active')
-			]),
-		_List_fromArray(
-			[
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('modal-background')
-					]),
-				_List_Nil),
-				A2(
-				$elm$html$Html$div,
-				_List_fromArray(
-					[
-						$elm$html$Html$Attributes$class('modal-content')
-					]),
-				_List_fromArray(
-					[
-						A2(
-						$elm$html$Html$section,
-						_List_fromArray(
-							[
-								$elm$html$Html$Attributes$class('hero is-primary')
-							]),
-						_List_fromArray(
-							[
-								A2(
-								$elm$html$Html$div,
-								_List_fromArray(
-									[
-										$elm$html$Html$Attributes$class('hero-body')
-									]),
-								_List_fromArray(
-									[
-										A2(
-										$elm$html$Html$p,
-										_List_fromArray(
-											[
-												$elm$html$Html$Attributes$class('title')
-											]),
-										_List_fromArray(
-											[
-												$elm$html$Html$text('All Done!')
-											]))
-									]))
-							]))
-					]))
-			]));
-};
 var $author$project$Main$mysteryWordView = function (model) {
 	return A2(
 		$elm$html$Html$div,
@@ -6187,7 +6155,6 @@ var $author$project$Main$mysteryWordView = function (model) {
 							])),
 						A2($elm$html$Html$br, _List_Nil, _List_Nil),
 						A2($elm$html$Html$br, _List_Nil, _List_Nil),
-						$author$project$Main$progressBar(model),
 						A2(
 						$elm$html$Html$h1,
 						_List_fromArray(
@@ -6242,7 +6209,8 @@ var $author$project$Main$mysteryWordView = function (model) {
 							[
 								$elm$html$Html$text(
 								'Enemy Position: ' + $elm$core$String$fromInt(model.enemyPosition))
-							]))
+							])),
+						$author$project$Main$enemy(model)
 					]))
 			]));
 };
